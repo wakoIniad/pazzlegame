@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class ListenPlayerInput : MonoBehaviour
 {
     //Rigidbody2D rb;
-    public List<CharacterModel> tagetCharacters = new List<CharacterModel>();
+    public List<Transform> tagetCharacters = new List<Transform>();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,38 +16,38 @@ public class ListenPlayerInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 moveVector = new Vector3(0, 0, 0);
-        if(Input.GetKeyDown(KeyCode.W)) {
-            moveVector.y = 1;
-        }
-        if(Input.GetKeyDown(KeyCode.A)) {
-            moveVector.x = -1;
-        }
-        if(Input.GetKeyDown(KeyCode.S)) {
-            moveVector.y = -1;
-        }
-        if(Input.GetKeyDown(KeyCode.D)) {
-            moveVector.x = 1;
-        }
-        for(int i = 0;i < tagetCharacters.Count; i++) {
+        
+        foreach(Transform charaTransform in tagetCharacters) {
+            Vector3 moveVector = new Vector3(0, 0, 0);
+            
+            if(Input.GetKeyDown(KeyCode.W)) {
+                moveVector = charaTransform.up;
+            }
+            if(Input.GetKeyDown(KeyCode.A)) {
+                moveVector = -charaTransform.right;
+            }
+            if(Input.GetKeyDown(KeyCode.S)) {
+                moveVector = -charaTransform.up;
+            }
+            if(Input.GetKeyDown(KeyCode.D)) {
+                moveVector = charaTransform.right;
+            }
             if(Passable(
-                tagetCharacters[i].containerTransform.TransformPoint(
-                    tagetCharacters[i].modelTransform.localPosition + moveVector
-                )
+                charaTransform.position + moveVector
             )) {
-                tagetCharacters[i].modelTransform.localPosition += moveVector;
+                charaTransform.position += moveVector;
             }
         }
         if(Input.GetKeyDown(KeyCode.R)) {
             Debug.Log("KeyCode.R");
-            for(int i = 0;i < tagetCharacters.Count; i++) {
-                tagetCharacters[i].containerTransform.Rotate(new Vector3(0,0,90));
+            foreach(Transform charaTransform in tagetCharacters) {
+                charaTransform.Rotate(new Vector3(0,0,90));
             }
         }
         if(Input.GetKeyDown(KeyCode.L)) {
             Debug.Log("KeyCode.L");
-            for(int i = 0;i < tagetCharacters.Count; i++) {
-                tagetCharacters[i].containerTransform.Rotate(new Vector3(0,0,-90));
+            foreach(Transform charaTransform in tagetCharacters) {
+                charaTransform.Rotate(new Vector3(0,0,-90));
             }
         }
     }
